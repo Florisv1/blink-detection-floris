@@ -1,3 +1,6 @@
+
+
+//hoi/
 // modules are defined as an array
 // [ module function, map of requires ]
 //
@@ -84425,13 +84428,7 @@ async function renderPrediction() {
 
     if (predictions.length > 0) {
       predictions.forEach(prediction => {
-        // NOTE: Iris position did not work as the diff remains almost same, so trying 0th upper and lower eyes
         // NOTE: Error in docs, rightEyeLower0 is mapped to rightEyeUpper0 and vice-versa
-        // NOTE: taking center point for now, can add more points for accuracy(mabye)
-        console.log('*** 🔥 prediction', JSON.stringify(prediction)); // Other logic
-        // NOTE: Found another way to detect it by Eye Aspect Ratio https://www.pyimagesearch.com/2017/04/24/eye-blink-detection-opencv-python-dlib/
-        // NOTE: Found it to be more accurate and gives better prection in cases where earlier method did not work.
-
         let lowerRight = prediction.annotations.rightEyeUpper0;
         let upperRight = prediction.annotations.rightEyeLower0;
         const rightEAR = getEAR(upperRight, lowerRight); // TODO: log this prediction
@@ -84507,20 +84504,9 @@ var raf;
 
 const init = async () => {
   await _index.default.loadModel();
-  await _index.default.setUpCamera(videoElement); // let stopButton = document.getElementById('stop-button');
-  // if (stopButton) {
-  //   stopButton.addEventListener('click', () => {
-  //     cancelAnimationFrame(raf);
-  //     console.log('*** 🔥 testBucket', JSON.stringify(blink.testBucket));
-  //   });
-  // }
-  // let leftEye = document.getElementById('left-eye');
-  // let rightEye = document.getElementById('right-eye');
-  // let blinkIndicator = document.getElementById('blink-indicator');
-  // let longBlinkIndicator = document.getElementById('long-blink-indicator');
-  // let rateIndicator = document.getElementById('blink-rate');
+  await _index.default.setUpCamera(videoElement); // let blinkIndicator = document.getElementById('blink-indicator');
 
-  let body = document.getElementsByTagName('body'); // let winkIndicator = document.getElementById('wink-indicator');
+  let body = document.getElementsByTagName('body');
 
   const predict = async () => {
     let result = await _index.default.getBlinkPrediction();
@@ -84532,28 +84518,9 @@ const init = async () => {
       // } else {
       //   blinkIndicator.style.color = 'green';
       // }
-      // if (result.rate !== undefined) {
-      //   rateIndicator.textContent = result.rate;
-      // }
       if (result.longBlink) {
         toggleMode();
-      } // if (result.wink) {
-      //   winkIndicator.style.color = 'red';
-      // } else {
-      //   winkIndicator.style.color = 'green';
-      // }
-      // console.log('*** 🔥 rs', result.left, result.right);
-      // if (result.left) {
-      //   leftEye.style.color = 'red';
-      // } else {
-      //   leftEye.style.color = 'green';
-      // }
-      // if (result.right) {
-      //   rightEye.style.color = 'red';
-      // } else {
-      //   rightEye.style.color = 'green';
-      // }
-
+      }
     }
 
     raf = requestAnimationFrame(predict);
